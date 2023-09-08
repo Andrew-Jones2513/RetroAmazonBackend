@@ -1,0 +1,27 @@
+{
+  "name": "retroamazonbackend",
+  "version": "1.0.0",
+  "description": "We are building a mock amazon.com for ~1995",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "start-dev": "nodemon -r dotenv/config server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Andrew-Jones2513/RetroAmazonBackend.git"
+  },
+  "author": "Andrew Jones",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Andrew-Jones2513/RetroAmazonBackend/issues"
+  },
+  "homepage": "https://github.com/Andrew-Jones2513/RetroAmazonBackend#readme",
+  "dependencies": {
+    "debug": "^4.3.4",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}
