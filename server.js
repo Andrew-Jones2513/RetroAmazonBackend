@@ -1,11 +1,15 @@
 import express from 'express';
 import { BookRouter } from './routes/api/book.js';
+import { UserRouter } from './routes/api/user.js';
 import * as dotenv from 'dotenv';
 dotenv.config();
+import { connect } from './database.js';
 
 // Create a debug channel called app:Server
 import debug from 'debug';
 const debugServer = debug('app:Server');
+
+connect();
 
 const app = express();
 
@@ -13,6 +17,7 @@ const app = express();
 // Allow form data
 app.use( express.urlencoded({extended: true,}));
 app.use('/api/books', BookRouter);
+app.use('/api/users', UserRouter);
 
 // Error Handling middleware to handle routes not found
 app.use((req,res) => {
