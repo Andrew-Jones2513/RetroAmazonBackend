@@ -6,6 +6,8 @@ const debugDatabase = debug('app:Database');
 
 let _db = null;
 
+const newId = (str) => new ObjectId(str);
+
 async function connect(){
   if(!_db){
     // Atlas connection string
@@ -20,8 +22,10 @@ async function connect(){
 async function ping(){
   const db = await connect();
   await db.command({ ping: 1 });
-  debugDatabase("Pinged your deployment. You successfully connected to MongoDB!")
+  debugDatabase("Pinged your deployment. You successfully connected to MongoDB!");
 }
+
+// Books----------------------------------------------------------------------------------------------------------------------------------------------
 
 async function getBooks(){
   const db = await connect();
@@ -63,6 +67,18 @@ async function getUsers(){
   return users;
 }
 
+async function getUserById(id){
+  const db = await connect();
+  const user = await db.collection("User").findOne({ _id: id });
+  return user;
+}
+
+async function updateUser(user){
+  const db = await connect();
+  const result = await db.collection("User").updateOne({ _id: user._id }, { $set: { ...user }});
+  return result;
+}
+
 async function addUser(user){
   const db = await connect();
   user.role = ['customer'];
@@ -76,6 +92,20 @@ async function loginUser(user){
   return resultUser;
 }
 
+// -----------------------------------------------------------------------------------------------------------------------------------------------
+
+async function saveEdit(edit){
+  const db = await connect();
+  const result = await db.collection("Edit").insertOne(edit);
+  return result;
+}
+
+async function findRoleByName(name){
+  const db = await connect();
+  const role = await db.collection("Role").findOne({ name: name });
+  return role;
+}
+
 ping();
 
-export { connect, ping, getBooks, getBookById, addBook, updateBook, deleteBook, getUsers, addUser, loginUser }
+export { connect, ping, getBooks, getBookById, addBook, updateBook, deleteBook, getUsers, addUser, loginUser, newId, getUserById, updateUser, saveEdit, findRoleByName }

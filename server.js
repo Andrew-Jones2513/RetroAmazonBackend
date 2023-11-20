@@ -9,9 +9,22 @@ import { connect } from './database.js';
 import debug from 'debug';
 const debugServer = debug('app:Server');
 
+import cookieParser from 'cookie-parser';
+import { authMiddleware } from '@merlin4/express-auth';
+import cors from 'cors';
+
 connect();
 
 const app = express();
+
+app.use(express.static('public'));
+app.use(express.json()); //accepts json data in the body of the request from the client
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
+app.use(cookieParser());
+app.use(authMiddleware(process.env.JWT_SECRET, 'authToken', { httpOnly: true, maxAge: 1000*60*60 }));
 
 // Middleware
 // Allow form data
@@ -26,8 +39,8 @@ app.use((req,res) => {
 
 // Handle server exceptions to keep my server from crashing
 app.use((err, req, res, next) => {
-  debug(err.stack);
-  res.status(500).json({error: err.stack});
+  debug(err.message);
+  res.status(err.status).json({error: err.message});
 });
 
 // Default route
